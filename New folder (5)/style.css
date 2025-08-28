@@ -1,0 +1,41 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #18181b;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 2.5em;
+  color: #9147ff;
+  margin-bottom: 30px;
+}
+
+.clip-section {
+  margin-bottom: 50px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 30px;
+}
+
+.clip-section h2 {
+  font-size: 1.8em;
+  color: #facc15;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.clip {
+  margin: 20px auto;
+  width: fit-content;
+  background: #27272a;
+  padding: 15px;
+  border-radius: 10px;
+  max-width: 420px;
+}
+
+.clip h3 {
+  font-size: 1.1em;
+  margin-bottom: 10px;
+  color: #f3f4f6;
+}

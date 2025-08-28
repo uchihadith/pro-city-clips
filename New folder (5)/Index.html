@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Pro City Clips</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Pro City Twitch Clips</h1>
+  <div id="clips"></div>
+
+  <script>
+    const clientId = 'YOUR_CLIENT_ID';           // <-- Replace this
+    const accessToken = 'YOUR_ACCESS_TOKEN';     // <-- Replace this
+    const proCityPlayers = [
+      'tarik', 'tenz', 'yay', 'fns', 's0m',
+      'ethan', 'subroza', 'shahzam', 'steel_tv',
+      'leaf', 'trent'
+    ];
+
+    async function getUserId(login) {
+      const res = await fetch(`https://api.twitch.tv/helix/users?login=${login}`, {
+        headers: {
+          'Client-ID': clientId,
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+      const data = await res.json();
+      return data.data.length > 0 ? data.data[0].id : null;
+    }
+
+    async function getClips(broadcasterId) {
+      const res = await fetch(`https://api.twitch.tv/helix/clips?broadcaster_id=${broadcasterId}&first=3`, {
+        headers: {
+          'Client-ID': clientId,
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+      const data = await res.json();
+      return data.data;
+    }
+
+    async function loadClips() {
+      const clipsDiv = document.getElementById('clips');
+
+      for (const player of proCityPlayers) {
+        const userId = await getUserId(player);
+        if (!userId) continue;
+
+        const clips = await getClips(userId);
+        if (clips.length === 0) continue;
+
+        const section = document.createElement('div');
+        section.className = 'clip-section';
+
+        const heading = document.createElement('h2');
+        heading.textContent = player;
+        section.appendChild(heading);
+
+        clips.forEach(clip => {
+          const div = document.createElement('div');
+          div.className = 'clip';
+          div.innerHTML = `
+            <h3>${clip.title}</h3>
+            <iframe
+              src="https://clips.twitch.tv/embed?clip=${clip.id}&parent=localhost"
+              height="300"
+              width="400"
+              allowfullscreen>
+            </iframe>
+          `;
+          section.appendChild(div);
+        });
+
+        clipsDiv.appendChild(section);
+      }
+    }
+
+    loadClips();
+  </script>
+</body>
+</html>
